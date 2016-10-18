@@ -88,7 +88,7 @@
 	</div>
 	<div class="row">
 		<h4>Change Contact Info</h4>
-		<?php echo form_open('user/change_contactinfo'); ?>
+		<?php echo form_open('user/change_userinfo'); ?>
 		<div class="form-group">
 		<?php echo form_input(['name' => 'first_name', 'id' => 'first_name', 'class' => 'form-control', 'placeholder' => 'First Name']); ?>
 		</div>
@@ -103,6 +103,9 @@
 		</div>
 		<div class="form-group">
 		<?php echo form_input(['name' => 'address', 'id' => 'address', 'class' => 'form-control', 'placeholder' => 'Address']); ?>
+		</div>
+		<div class="form-group">
+		<?php echo form_input(['name' => 'phone', 'id' => 'phone', 'class' => 'form-control', 'placeholder' => 'Phone Number']); ?>
 		</div>
 		<div class="form-group">
 		<?php echo form_submit(['type' => 'submit', 'class' => 'btn btn-primary', 'value' => 'Save']); ?>
