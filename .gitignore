@@ -4,3 +4,6 @@
 */cache/*
 !*/cache/index.html
 !*/cache/.htaccess
+/.externalToolBuilders/
+/.settings/
+/user_guide/
