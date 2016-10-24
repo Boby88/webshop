@@ -1,0 +1,30 @@
+@import 'bootstrap';
+@import 'ux/loader';
+
+
+@import 'admin_sidebar';
+
+body {
+  background-color: #f8f8f8;
+}
+#admin-login {
+  margin-top: 100px;
+  padding: 0;
+  max-width: 400px;
+  background-color: #fff;
+  border: 1px solid $gray-lighter;
+  border-radius: 4px;
+  
+  h1 {
+    background-color: $brand-primary;
+    color: #FFF;
+    margin: 0;
+    padding: 10px;
+    font-size: 20px;
+    line-height: 30px;
+    @include border-top-radius(3px);
+  }
+  form {
+    padding: 50px 30px 30px;
+  }
+}
