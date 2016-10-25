@@ -21,7 +21,7 @@ class Login extends MY_Controller {
 
 			$data['user'] = array(
 				'profile'			=> ($userinfo != NULL && $userinfo->first_name != '' && $userinfo->last_name != '') ? $userinfo->first_name . ' ' . $userinfo->last_name : $memberinfo->email,
-				'photo_url'		=> ($userinfo != NULL && $userinfo->photo_url) ? $userinfo->photo_url : base_url('assets/img/empty_user_25x25.jpg')
+				'photo_url'		=> ($userinfo != NULL && $userinfo->profile_photo) ? $userinfo->profile_photo : base_url('assets/img/empty_user_25x25.jpg')
 			);
 			$this->load->view('user_menu', $data);
 		}
@@ -66,7 +66,7 @@ class Login extends MY_Controller {
 			if($query = $this->membership_model->validate()) // if the user's credentials validated...
 			{
 				$data = array(
-					'email' => $this->input->post('email')
+					'email' => $this->input->post('email_address')
 				);
 				$this->log_in('email', $data['email'], 'site/members_area');
 			}
@@ -317,13 +317,15 @@ class Login extends MY_Controller {
 	 */
 	private function log_in($key, $value, $url, $redirect = FALSE)
 	{
-		$this->load->model('membership_model');
-		$this->load->model('user/user_model');
+		$this->load->models(array(
+			'membership_model',
+			'user/user_model'
+		));
 
 		$data['is_logged_in'] = TRUE;
 
 		$data['memberinfo'] = $this->membership_model->get_member_data($key, $value);
-		$data['userinfo'] = $this->user_model->get_user_data($data['member']->id);
+		$data['userinfo'] = $this->user_model->get_user_data($data['memberinfo']->member_id);
 		$this->session->set_userdata($data);
 
 		if ($redirect === TRUE)

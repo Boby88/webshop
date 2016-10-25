@@ -1,3 +1,4 @@
+<?php Modules::run('admin/is_admin_logged_in'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

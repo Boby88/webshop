@@ -8,12 +8,14 @@ class Admin extends MY_Controller {
 
 	public function index()
 	{
-		if($this->is_logged_in())
+		$userdata = $this->session->userdata('admin');
+		$is_logged_in = $this->session->userdata('is_admin_logged_in');
+		if(!isset($is_logged_in) || $is_logged_in != true)
 		{
-			$data = array();
-			$this->load->view('admin_page', $data);
-		} else {
 			$this->load->view('admin_login');
+		} else {
+			$data['admin'] = $userdata;
+			$this->load->view('admin_page', $data);
 		}
 	}
 
@@ -40,14 +42,14 @@ class Admin extends MY_Controller {
 		}
 		else
 		{
-			$this->load->model('admin_model');
+			$this->load->model('login/membership_model');
 			// esisting member
-			if($query = $this->admin_model->validate()) // if the user's credentials validated...
+			if($query = $this->membership_model->validate()) // if the user's credentials validated...
 			{
-				header('Content-Type: application/json; charset=UTF-8');
-				die(json_encode(array(
-						'redirect_url'	=> base_url('admin')
-				)));
+				$data = array(
+					'email'	=> $this->input->post('email_address')
+				);
+				$this->log_in('email', $data['email'], 'admin');
 			}
 			else // incorrect username or password
 			{
@@ -63,8 +65,48 @@ class Admin extends MY_Controller {
 	}
 
 
-	private function is_logged_in()
+	public function is_admin_logged_in()
 	{
-		return true;
+		$is_logged_in = $this->session->userdata('is_admin_logged_in');
+		if(!isset($is_logged_in) || $is_logged_in != true)
+		{
+			echo 'You don\'t have permission to access this page. <a href="../admin">Login</a>';
+			redirect('admin', redirect);
+			die();
+			//$this->load->view('login_form');
+		}
+	}
+
+	public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect('admin', redirect);
+	}
+
+	private function log_in($key, $value, $url, $redirect = FALSE)
+	{
+		$this->load->models(array(
+			'login/membership_model',
+			'user/user_model'
+		));
+
+		$data['is_logged_in'] = TRUE;
+		$data['is_admin_logged_in'] = TRUE;
+
+		$data['memberinfo'] = $this->membership_model->get_member_data($key, $value);
+		$data['userinfo'] = $this->user_model->get_user_data($data['memberinfo']->member_id);
+		$this->session->set_userdata($data);
+
+		if ($redirect === TRUE)
+		{
+			redirect($url, redirect);
+		}
+		else
+		{
+			header('Content-Type: application/json; charset=UTF-8');
+			die(json_encode(array(
+					'redirect_url'	=> base_url($url)
+			)));
+		}
 	}
 }

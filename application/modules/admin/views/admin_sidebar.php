@@ -28,4 +28,7 @@
 	<li>
 		<a href="#">Contact</a>
 	</li>
+	<li>
+		<a href="<?php echo base_url('admin/logout'); ?>">Logout</a>
+	</li>
 </ul>
