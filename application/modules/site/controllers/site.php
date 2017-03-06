@@ -26,6 +26,4 @@ class Site extends MY_Controller
 		echo 'good. you\'re logged in.';
 	}
 
-
-
 }
